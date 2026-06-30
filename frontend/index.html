@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REMEDI - Resilient Medication Management for Disasters</title>
+    <meta name="description"
+        content="A multi-agent pharmacoinformatics intelligence dashboard forecasting medication demands during flood disasters in Malaysia public healthcare facilities.">
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Vanilla CSS -->
+    <link rel="stylesheet" href="index.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Marked.js for rendering markdown Situational Brief -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Leaflet.js CDN for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header" id="remedi-header">
+            <div class="header-logo-wrapper">
+                <div class="header-logo" style="display: flex; align-items: center; gap: 0.75rem;">
+                    <img src="logo-remedi.png" alt="REMEDI Logo"
+                        style="height: 38px; border-radius: 4px; object-fit: contain;">
+                    <h1 style="margin: 0; line-height: 1;">REMEDI</h1>
+                </div>
+                <p class="header-subtitle">Resilient Medication Management for Disasters • District Pharmacy
+                    Intelligence</p>
+            </div>
+
+            <!-- Theme Toggle -->
+            <button class="theme-toggle-btn" id="btn-theme-toggle">
+                <span id="theme-toggle-icon">☀️</span>
+                <span id="theme-toggle-text">Light Mode</span>
+            </button>
+        </header>
+
+        <!-- Stepper -->
+        <div class="stepper">
+            <div class="step active" id="step-1-indicator">
+                <span class="step-num">1</span>
+                <span class="step-label">Alert Ingestion</span>
+            </div>
+            <div class="step-line" id="step-line-1"></div>
+            <div class="step" id="step-2-indicator">
+                <span class="step-num">2</span>
+                <span class="step-label">District Analysis</span>
+            </div>
+            <div class="step-line" id="step-line-2"></div>
+            <div class="step" id="step-3-indicator">
+                <span class="step-num">3</span>
+                <span class="step-label">Dispatch Output</span>
+            </div>
+        </div>
+
+        <!-- Wizard screens -->
+        <main class="wizard-screens-container">
+
+            <!-- SCREEN 1: Alert Ingestion -->
+            <section class="wizard-screen" id="screen-ingestion">
+                <div class="card" style="max-width: 700px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h2>Disaster Alert Ingest</h2>
+                        <span class="status-indicator idle" id="workflow-status">IDLE</span>
+                    </div>
+                    <p class="card-description">Ingest raw, unstructured flood warnings. The coordinator agent parses
+                        geographic coordinates and determines whether Makar District is affected.</p>
+
+                    <div class="input-group">
+                        <label for="alert-text-input">Raw Text Disaster Alert</label>
+                        <textarea id="alert-text-input"
+                            placeholder="e.g. Severe flooding warning in Makar, Pahang rivers rising above danger level. Rapid rise in river levels, medical facilities prep."></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" id="btn-submit-alert" style="margin-bottom: 1.5rem;">Analyze
+                        Ingestion Alert</button>
+
+                    <!-- Alert Status Message Box -->
+                    <div class="hidden" id="ingestion-result-box"
+                        style="padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.02); margin-bottom: 1.5rem;">
+                        <h3 id="triage-status-title"
+                            style="margin-bottom: 0.5rem; font-family: var(--font-heading); font-size: 1.05rem;">
+                            Catchment Validation</h3>
+                        <p id="triage-status-desc" style="font-size: 0.85rem; color: var(--text-secondary);"></p>
+                    </div>
+
+                    <button class="btn btn-success hidden" id="btn-proceed-to-analysis">Proceed to District Analysis
+                        →</button>
+                </div>
+            </section>
+
+            <!-- SCREEN 2: District Analysis & HITL Verification -->
+            <section class="wizard-screen hidden" id="screen-analysis">
+
+                <!-- Compliance & Safety Message at top -->
+                <div class="card" id="governance-card"
+                    style="margin-bottom: 2rem; border-color: rgba(16, 185, 129, 0.15);">
+                    <div class="card-header">
+                        <h2>Data Compliance & Safety Audit (Pre-Analytics)</h2>
+                    </div>
+                    <div class="gov-status-wrapper">
+                        <div class="gov-badge" id="gov-badge-status">
+                            <span class="gov-icon" id="gov-status-icon">✓</span>
+                            <span id="gov-status-text">PASSED</span>
+                        </div>
+                        <p class="gov-reason" id="gov-reason-text">Verifying compliance rules: strictly aggregated
+                            metadata parsed. No patient identifiers present.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+
+                    <!-- Left Column: Map & GIS Metadata -->
+                    <div class="left-column">
+                        <!-- GIS & Facility Context Card -->
+                        <div class="card" id="gis-card">
+                            <div class="card-header">
+                                <h2>District Catchment Baselines</h2>
+                            </div>
+                            <div class="gis-info-grid">
+                                <div class="gis-stat">
+                                    <span class="gis-label">Makar Catchment</span>
+                                    <span class="gis-value" id="gis-facility">Makar District</span>
+                                </div>
+                                <div class="gis-stat">
+                                    <span class="gis-label">Total Facilities</span>
+                                    <span class="gis-value">2 (HKM & HKP)</span>
+                                </div>
+                                <div class="gis-stat">
+                                    <span class="gis-label">Base Population</span>
+                                    <span class="gis-value" id="gis-population">400,000</span>
+                                </div>
+                                <div class="gis-stat">
+                                    <span class="gis-label">Severity Index</span>
+                                    <span class="gis-value" id="gis-vulnerability">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Logistics Map Card -->
+                        <div class="card" id="map-card">
+                            <div class="card-header">
+                                <h2>Interactive Logistics Map</h2>
+                            </div>
+                            <p class="card-description">Visualizing stock relocation routes between Hospital Kuala Makar
+                                (HKM), Hospital Kampung Pisang (HKP) and MDHO.</p>
+                            <div id="remedi-map"
+                                style="height: 260px; border-radius: 8px; margin-top: 10px; border: 1px solid var(--border-color); z-index: 1;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Forecast Projections with switchable toggles -->
+                    <div class="right-column">
+                        <div class="card" id="chart-card" style="height: 100%; display: flex; flex-direction: column;">
+                            <div class="card-header" style="margin-bottom: 0.5rem;">
+                                <h2>TFT Medication Demand Projections</h2>
+                            </div>
+                            <p class="card-description">Comparing historical consumption trends and forecast quantiles
+                                vs physical stock buffers.</p>
+
+                            <!-- Switchable Diagram Toggles -->
+                            <div class="facility-toggle-container"
+                                style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                                <div class="toggle-group">
+                                    <button class="toggle-btn active" id="btn-chart-hkm">Hospital Kuala Makar</button>
+                                    <button class="toggle-btn" id="btn-chart-hkp">Hospital Kampung Pisang</button>
+                                </div>
+                                <div class="toggle-group"
+                                    style="background: rgba(0, 0, 0, 0.05); padding: 0.2rem; border-radius: 6px;">
+                                    <button class="toggle-btn active" id="btn-med-aml"
+                                        style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">Amlodipine</button>
+                                    <button class="toggle-btn" id="btn-med-per"
+                                        style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">Perindopril</button>
+                                    <button class="toggle-btn" id="btn-med-sim"
+                                        style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">Simvastatin</button>
+                                </div>
+                            </div>
+
+                            <!-- General Legend on Top -->
+                            <div class="general-legend-container"
+                                style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.25rem; font-size: 0.8rem; font-weight: 600; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <span
+                                        style="width: 12px; height: 12px; background-color: #9CA3AF; border-radius: 3px; display: inline-block;"></span>
+                                    <span style="color: var(--text-primary);">Actual</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <span
+                                        style="width: 12px; height: 12px; background-color: #F59E0B; border-radius: 3px; display: inline-block;"></span>
+                                    <span style="color: var(--text-primary);">Conservetive Forecast (p10)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <span
+                                        style="width: 12px; height: 12px; background-color: #0EA5E9; border-radius: 3px; display: inline-block;"></span>
+                                    <span style="color: var(--text-primary);">Expected Forecast (p50)</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                                    <span
+                                        style="width: 12px; height: 12px; background-color: #10B981; border-radius: 3px; display: inline-block;"></span>
+                                    <span style="color: var(--text-primary);">Extreme Forecast (p90)</span>
+                                </div>
+                            </div>
+
+                            <div class="charts-subgrid" style="flex: 1; min-height: 250px;">
+                                <div class="chart-wrapper">
+                                    <h3 class="chart-title-sub">Daily Utilisation</h3>
+                                    <div style="flex: 1; position: relative;">
+                                        <canvas id="remedi-line-chart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="chart-wrapper">
+                                    <h3 class="chart-title-sub">Stock Projection</h3>
+                                    <div style="flex: 1; position: relative;">
+                                        <canvas id="remedi-bar-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Recommended Action Plan (Editable) -->
+                <div class="card" style="margin-top: 2rem;">
+                    <div class="card-header">
+                        <h2>Action Plan & Manager Recommendations</h2>
+                        <span class="badge badge-hitl">MANAGER REVIEW REQUIRED</span>
+                    </div>
+                    <p class="card-description">AI recommended inventory balancing. Set baseline quantiles or use bulk
+                        scaling multiplier below, or edit cell inputs directly.</p>
+
+                    <!-- Bulk Adjustment Controls -->
+                    <div class="bulk-controls-container">
+                        <div class="bulk-group">
+                            <span
+                                style="font-weight: 600; font-size: 0.85rem; display: block; margin-bottom: 0.5rem; color: var(--text-primary);">Procurement
+                                & Relocation Baseline Target</span>
+                            <div class="btn-group" style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary btn-small" id="btn-bulk-p10">Conservative
+                                    (p10)</button>
+                                <button class="btn btn-secondary btn-small active" id="btn-bulk-p50">Default
+                                    (p50)</button>
+                                <button class="btn btn-secondary btn-small" id="btn-bulk-p90">Extreme (p90)</button>
+                            </div>
+                        </div>
+                        <div class="bulk-group" style="flex: 1; min-width: 200px;">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                                <label for="bulk-slider"
+                                    style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Bulk
+                                    Adjustment Multiplier</label>
+                                <span id="bulk-slider-val"
+                                    style="font-weight: 700; font-size: 0.9rem; color: var(--primary-color);">100%</span>
+                            </div>
+                            <input type="range" id="bulk-slider" min="50" max="150" value="100" step="5">
+                        </div>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="action-plan-table" id="action-plan-table-body">
+                            <thead>
+                                <tr>
+                                    <th>Facility</th>
+                                    <th>Medication</th>
+                                    <th>Current Stock</th>
+                                    <th>Expected Demand (p50)</th>
+                                    <th>Relocation Qty</th>
+                                    <th>Procurement Qty</th>
+                                    <th>Deficit Status</th>
+                                    <th>Status Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div
+                        style="display: flex; gap: 1.5rem; justify-content: flex-end; margin-top: 1.5rem; align-items: center; width: 100%;">
+                        <button class="btn btn-text" id="btn-back-to-step-1"
+                            style="margin-right: auto; width: auto; padding: 0; color: var(--text-secondary);">← Back to
+                            Ingestion</button>
+                        <button class="btn btn-secondary" id="btn-show-modify-form" style="width: auto;">Request Model
+                            Refinement</button>
+                        <button class="btn btn-success" id="btn-approve-action-plan" style="width: auto;">Approve &
+                            Dispatch Plan →</button>
+                    </div>
+
+                    <!-- Refinement Modal style text area -->
+                    <div class="modification-form hidden" id="modification-form-container" style="margin-top: 1.5rem;">
+                        <label for="modify-feedback-input" style="font-weight: 600; font-size: 0.85rem;">Refinement
+                            Feedback / Instructions</label>
+                        <textarea id="modify-feedback-input"
+                            placeholder="e.g. Adjust flood severity index to 0.9. Reduce forecast horizon to 5 days."></textarea>
+                        <div class="form-actions" style="margin-top: 0.75rem;">
+                            <button class="btn btn-primary" id="btn-submit-modification">Submit & Re-Calculate</button>
+                            <button class="btn btn-text" id="btn-cancel-modify">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCREEN 3: Dispatch Report & Outputs -->
+            <section class="wizard-screen hidden" id="screen-dispatch">
+                <!-- Post-decision validation clearance check -->
+                <div class="card" style="border-color: rgba(16, 185, 129, 0.2); margin-bottom: 2rem;">
+                    <div class="card-header">
+                        <h2>Post-Decision Compliance Audit</h2>
+                        <span class="badge badge-success">COMPLETED</span>
+                    </div>
+                    <div class="gov-status-wrapper"
+                        style="background: rgba(16, 185, 129, 0.04); border-color: rgba(16, 185, 129, 0.15);">
+                        <div class="gov-badge" style="color: var(--success-color);">
+                            <span class="gov-icon">✓</span>
+                            <span>VERIFIED</span>
+                        </div>
+                        <p class="gov-reason" id="post-safety-reason-text">All customized allocation quantities cleared
+                            post-decision safety audit guidelines.</p>
+                    </div>
+                </div>
+
+                <!-- Two side-by-side instruction blocks -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Dispatched Operational Action Instructions</h2>
+                    </div>
+                    <p class="card-description">Targeted plans have been dispatched to each respective clinic.
+                        Operational sign-offs are locked.</p>
+
+                    <div class="dispatch-briefs-grid">
+                        <div class="dispatch-brief-card" id="dispatch-hkm-card">
+                            <!-- HKM details -->
+                        </div>
+                        <div class="dispatch-brief-card" id="dispatch-hkp-card">
+                            <!-- HKP details -->
+                        </div>
+                    </div>
+
+                    <div
+                        style="display: flex; gap: 1.5rem; justify-content: flex-end; margin-top: 2rem; align-items: center; width: 100%;">
+                        <button class="btn btn-text" id="btn-back-to-step-2"
+                            style="margin-right: auto; width: auto; padding: 0; color: var(--text-secondary);">← Back to
+                            Analysis</button>
+                        <button class="btn btn-primary" id="btn-restart-wizard"
+                            style="max-width: 250px; width: auto; margin: 0;">Ingest New Alert</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Designed by Radzi Aziz 🇲🇾 | 5DGAI Google x Kaggle Capstone Project © 2026.</p>
+        </footer>
+    </div>
+
+    <!-- Vanilla Javascript Logic -->
+    <script src="index.js"></script>
+</body>
+
+</html>

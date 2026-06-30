@@ -1,0 +1,1 @@
+MDHO Safety Stock threshold is 1.3x. Relocation limit safety factor is 50%.
