@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Python-3.13-brightgreen.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-v0.115-orange.svg)](https://fastapi.tiangolo.com/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-blue)](https://remedi-ekun.onrender.com)
 
 **REMEDI** is a multi-agent pharmacy intelligence system built to manage chronic cardiovascular medication utilization surges during tropical flood disasters. Developed as a Capstone Project for **Kaggle's 5-Day AI Agents: Intensive Vibe Coding Course with Google**, it automates disaster ingestion, calculates multi-quantile demand surges, audits distribution plans using a multi-format local RAG policy database, and implements a strict human-in-the-loop (HITL) manager sign-off protocol.
 
@@ -128,6 +129,8 @@ uv sync
 ## 🚀 Running the Application
 
 ### Option A: Interactive Web Dashboard (Recommended)
+
+* **Live Demo**: Access the running dashboard instantly at [https://remedi-ekun.onrender.com](https://remedi-ekun.onrender.com) (no installation required).
 
 1. Start the local FastAPI server:
    ```bash
