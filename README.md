@@ -77,14 +77,14 @@ graph TD
 The demand surge factor is computed using:
 
 $$
-\text{surge\_factor} = 1.0 + (\text{severity} \times \text{vulnerability} \times 0.5)
+\text{Surge Factor} = 1.0 + (\text{Severity} \times \text{Vulnerability} \times 0.5)
 $$
 
 Where:
 
-* **p10 surge bounds multiplier**: $0.2 \times (\text{surge\_factor} - 1.0)$
-* **p50 expected multiplier**: $0.5 \times (\text{surge\_factor} - 1.0)$
-* **p90 extreme surge multiplier**: $0.8 \times (\text{surge\_factor} - 1.0)$
+* **p10 surge bounds multiplier**: $0.2 \times (\text{Surge Factor} - 1.0)$
+* **p50 expected multiplier**: $0.5 \times (\text{Surge Factor} - 1.0)$
+* **p90 extreme surge multiplier**: $0.8 \times (\text{Surge Factor} - 1.0)$
 
 ---
 
