@@ -128,10 +128,15 @@ uv sync
 
 ## 🚀 Running the Application
 
-### Option A: Interactive Web Dashboard (Recommended)
+### Option A: Live Hosted Web Dashboard (Recommended)
 
-* **Live Demo**: Access the running dashboard instantly at [https://remedi-ekun.onrender.com](https://remedi-ekun.onrender.com) (no installation required).
+Access the running dashboard instantly online (no installation or setup required):
+* **URL**: [https://remedi-ekun.onrender.com](https://remedi-ekun.onrender.com)
+* **Action**: Enter a disaster warning (e.g. *"Major flooding is expected to hit Makar District next week."*) and click **Analyze Alert & Run Forecast**.
 
+### Option B: Local Web Dashboard
+
+If you prefer to run the web dashboard locally on your machine:
 1. Start the local FastAPI server:
    ```bash
    uv run python app/fast_api_app.py
@@ -140,11 +145,12 @@ uv sync
    ```
    http://localhost:8000
    ```
-3. Enter a disaster warning (e.g. *"Amaran banjir di Selangor, paras air Sungai Selangor meningkat melebihi tahap bahaya."*) and click **Analyze Alert & Run Forecast**.
+3. Enter a disaster warning and run the analysis.
 
-### Option B: Terminal-based CLI Client
+### Option C: Local Terminal-based CLI Client
 
-1. Launch the interactive prompt:
+Run the interactive prompt directly in your shell:
+1. Launch the CLI client:
    ```bash
    uv run python run_remedi.py
    ```
