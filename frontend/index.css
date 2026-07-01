@@ -304,7 +304,7 @@ body::after {
     font-family: var(--font-heading);
     font-size: 1.25rem;
     font-weight: 600;
-    color: #FFFFFF;
+    color: var(--text-primary);
 }
 
 .card-description {
@@ -429,12 +429,16 @@ textarea:focus {
 }
 
 .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #FFFFFF;
+    background-color: var(--border-color);
+    color: var(--text-primary);
     border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
     background-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -444,7 +448,7 @@ textarea:focus {
 }
 
 .btn-text:hover {
-    color: #FFFFFF;
+    color: var(--primary-color);
 }
 
 /* GIS Info Display */
@@ -458,15 +462,15 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-main);
     padding: 0.75rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
 }
 
 .gis-label {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -538,7 +542,7 @@ textarea:focus {
 /* Style rendered Markdown headers and tables */
 .brief-report-content h1, .brief-report-content h2, .brief-report-content h3 {
     font-family: var(--font-heading);
-    color: #FFFFFF;
+    color: var(--text-primary);
     margin: 1.5rem 0 0.75rem 0;
 }
 
@@ -564,8 +568,8 @@ textarea:focus {
 }
 
 .brief-report-content th {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: #FFFFFF;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
     font-weight: 600;
 }
 
@@ -588,7 +592,7 @@ textarea:focus {
 .approval-header h3 {
     font-family: var(--font-heading);
     font-size: 1.1rem;
-    color: #FFFFFF;
+    color: var(--text-primary);
     margin-bottom: 4px;
 }
 
@@ -655,7 +659,7 @@ textarea:focus {
 .completion-success-message h3 {
     font-family: var(--font-heading);
     font-size: 1.4rem;
-    color: #FFFFFF;
+    color: var(--text-primary);
 }
 
 .completion-success-message p {
@@ -742,7 +746,7 @@ textarea:focus {
 
 .toggle-btn.active {
     background-color: var(--primary-color);
-    color: #FFFFFF;
+    color: #0B0F19;
 }
 
 /* Editable Action Plan Table */

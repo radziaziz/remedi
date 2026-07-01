@@ -18,7 +18,6 @@ Suboptimal resource planning leads to:
 
 1. **Critical stockouts** at heavily affected facilities.
 2. **Resource wastage** due to blind over-procurement from central depots.
-3. **Compliance breaches** by sending excessive supplies without administrative sign-off.
 
 ---
 

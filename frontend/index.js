@@ -158,6 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
             step2Ind.classList.add("completed");
             step3Ind.classList.add("active");
         }
+        
+        // Auto-scroll to top on wizard transition
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     // ==========================================
