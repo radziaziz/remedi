@@ -12,7 +12,7 @@
 
 ## 🎯 Problem Statement
 
-During natural disasters (e.g., tropical monsoon floods), public healthcare facilities face sudden, unpredictable surges in chronic medication demand (such as cardiovascular drugs) due to displacement, lost prescriptions, and stress-induced exacerbations.
+During natural disasters like floods, public healthcare facilities face sudden, unpredictable surges in medication demand due to displacement, lost prescriptions, and stress-induced exacerbations.
 
 Suboptimal resource planning leads to:
 
@@ -130,12 +130,14 @@ uv sync
 ### Option A: Live Hosted Web Dashboard (Recommended)
 
 Access the running dashboard instantly online (no installation or setup required):
+
 * **URL**: [https://remedi-ekun.onrender.com](https://remedi-ekun.onrender.com)
 * **Action**: Enter a disaster warning (e.g. *"Major flooding is expected to hit Makar District next week."*) and click **Analyze Alert & Run Forecast**.
 
 ### Option B: Local Web Dashboard
 
 If you prefer to run the web dashboard locally on your machine:
+
 1. Start the local FastAPI server:
    ```bash
    uv run python app/fast_api_app.py
@@ -149,6 +151,7 @@ If you prefer to run the web dashboard locally on your machine:
 ### Option C: Local Terminal-based CLI Client
 
 Run the interactive prompt directly in your shell:
+
 1. Launch the CLI client:
    ```bash
    uv run python run_remedi.py
